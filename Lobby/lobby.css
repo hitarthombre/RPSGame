@@ -1,0 +1,43 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.container {
+  text-align: center;
+  width: 80%;
+  max-width: 800px;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.online-players,
+.current-user,
+.stack {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px;
+  width: 30%;
+  background-color: white;
+}
+
+#online-players-list,
+#stack-list {
+  margin-top: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
