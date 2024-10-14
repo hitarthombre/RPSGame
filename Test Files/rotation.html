@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Moving Emojis</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f0f0;
+      }
+
+      .emoji-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      .emoji {
+        position: absolute;
+        font-size: 2.5rem;
+        animation: rotate 5s linear infinite;
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="emoji-container">
+      <!-- The 9 emojis -->
+      <div class="emoji">😀</div>
+      <div class="emoji">🎉</div>
+      <div class="emoji">💻</div>
+      <div class="emoji">🚀</div>
+      <div class="emoji">❤️</div>
+      <div class="emoji">🍕</div>
+      <div class="emoji">🐶</div>
+      <div class="emoji">🏀</div>
+      <div class="emoji">🎶</div>
+    </div>
+
+    <script>
+      const emojis = document.querySelectorAll(".emoji");
+      const container = document.querySelector(".emoji-container");
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
+
+      emojis.forEach((emoji) => {
+        // Set random initial positions
+        let posX = Math.random() * (containerWidth - 50); // Adjusting for emoji size
+        let posY = Math.random() * (containerHeight - 50); // Adjusting for emoji size
+        emoji.style.left = `${posX}px`;
+        emoji.style.top = `${posY}px`;
+
+        // Random speeds for each emoji
+        let speedX = (Math.random() * 4 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
+        let speedY = (Math.random() * 4 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
+
+        function moveEmoji() {
+          // Update positions
+          posX += speedX;
+          posY += speedY;
+
+          // Check boundaries for X (left and right walls)
+          if (posX <= 0 || posX + 50 >= containerWidth) {
+            speedX = -speedX; // Reverse direction on X-axis
+          }
+
+          // Check boundaries for Y (top and bottom walls)
+          if (posY <= 0 || posY + 50 >= containerHeight) {
+            speedY = -speedY; // Reverse direction on Y-axis
+          }
+
+          // Apply the new position to the emoji
+          emoji.style.left = `${posX}px`;
+          emoji.style.top = `${posY}px`;
+
+          // Continue the animation
+          requestAnimationFrame(moveEmoji);
+        }
+
+        // Start the movement
+        moveEmoji();
+      });
+    </script>
+  </body>
+</html>
