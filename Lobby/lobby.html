@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lobby</title>
+    <script type="module">
+      import {
+        ref,
+        update,
+        onValue,
+        onDisconnect,
+        get,
+        child,
+      } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+      import { db } from "./firebaseConfig.js";
+
+      const PING_INTERVAL = 2000; // Send a ping every 2 seconds
+      const TIMEOUT_DURATION = 5000; // Timeout after 5 seconds of no ping
+
+      let pingInterval;
+      let userId; // Store current user ID
+
+      const sendPing = (userRef) => {
+        update(userRef, { lastPing: Date.now() });
+      };
+
+      const startPinging = (username) => {
+        const dbRef = ref(db);
+        get(child(dbRef, `users/`)).then((snapshot) => {
+          const users = snapshot.val();
+
+          // Find userId based on the username
+          for (let key in users) {
+            if (users[key].username === username) {
+              userId = key;
+              break;
+            }
+          }
+
+          if (userId) {
+            const userRef = ref(db, `users/${userId}`);
+
+            // Mark the user as online immediately
+            update(userRef, { online: true }).then(() => {
+              // After marking user as online, send the first ping immediately
+              sendPing(userRef);
+
+              // Set up a ping mechanism that continuously updates `lastPing` field
+              pingInterval = setInterval(() => {
+                sendPing(userRef);
+              }, PING_INTERVAL);
+
+              // Handle disconnection (when the browser is closed)
+              onDisconnect(userRef).update({ online: false });
+            });
+          }
+        });
+      };
+
+      const monitorOnlineStatus = (username) => {
+        const lobbyContainer = document.getElementById("lobby");
+
+        // Listen for changes in the 'users' node to update online status
+        const usersRef = ref(db, "users/");
+        onValue(usersRef, (snapshot) => {
+          const users = snapshot.val();
+          let onlineUsers = [];
+
+          // Find online users and ensure the current user is marked online
+          for (let key in users) {
+            const user = users[key];
+            const timeSinceLastPing = Date.now() - user.lastPing;
+
+            if (timeSinceLastPing <= TIMEOUT_DURATION) {
+              // If the user is within the timeout, mark them online
+              update(ref(db, `users/${key}`), { online: true });
+
+              // Push to the online users list
+              onlineUsers.push(user.username);
+            } else {
+              // Mark the user offline if no ping received within timeout duration
+              update(ref(db, `users/${key}`), { online: false });
+            }
+          }
+
+          // Update the lobby with the list of online users
+          lobbyContainer.innerHTML = `Online Users: ${
+            onlineUsers.length
+          } <br> ${onlineUsers.join(", ")}`;
+
+          // Also ensure the current user is included in the online list
+          if (!onlineUsers.includes(username)) {
+            onlineUsers.push(username);
+          }
+        });
+      };
+
+      window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get("username");
+        if (username) {
+          startPinging(username); // Start the ping mechanism
+          monitorOnlineStatus(username); // Monitor other users' online status
+          document.getElementById("username-display").textContent = username;
+        } else {
+          alert("No username provided!");
+          window.location.href = "login.html"; // Redirect back to login
+        }
+      };
+
+      window.onbeforeunload = () => {
+        // Clear the interval when the user leaves the page
+        clearInterval(pingInterval);
+      };
+    </script>
+  </head>
+  <body>
+    <h2>Lobby</h2>
+    <div id="username-display"></div>
+    <div id="lobby">
+      <!-- Users and start button will be injected here -->
+    </div>
+    <button id="start-button">Start</button>
+  </body>
+</html>

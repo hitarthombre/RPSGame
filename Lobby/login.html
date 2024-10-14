@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <script type="module">
+      import {
+        ref,
+        get,
+        child,
+        update,
+      } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+      import { db } from "./firebaseConfig.js";
+
+      const login = async (username, password) => {
+        const dbRef = ref(db);
+        const snapshot = await get(child(dbRef, `users/`));
+
+        if (snapshot.exists()) {
+          const users = snapshot.val();
+          for (let key in users) {
+            if (
+              users[key].username === username &&
+              users[key].password === password
+            ) {
+              alert("Login successful");
+
+              // Mark user as online
+              const updates = {};
+              updates["users/" + key + "/online"] = true;
+              update(ref(db), updates);
+
+              // Redirect to lobby
+              window.location.href =
+                "lobby.html?username=" + encodeURIComponent(username);
+              return;
+            }
+          }
+        }
+        alert("Invalid username or password");
+      };
+
+      document.getElementById("login-button").addEventListener("click", () => {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        login(username, password);
+      });
+    </script>
+  </head>
+  <body>
+    <h2>Login Page</h2>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button id="login-button">Login</button>
+  </body>
+</html>

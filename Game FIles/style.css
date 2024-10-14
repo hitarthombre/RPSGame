@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Londrina+Sketch&display=swap');
+:root {
+    --myFont: "Londrina Sketch", sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+}
+
+.cotainer {
+    height: 100%;
+    width: 100%;
+    /* background-image: url(bgimage.jpg); */
+    object-fit: contain;
+    object-position: center;
+    background-color: rgb(37, 39, 39);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game {
+    height: 80%;
+    width: 50%;
+    color: #fff;
+    /* border: 2px solid #fff; */
+    -webkit-box-shadow: -3px -4px 37px -3px rgba(255, 255, 255, 1);
+    -moz-box-shadow: -3px -4px 37px -3px rgba(255, 255, 255, 1);
+    box-shadow: -3px -4px 37px -4px rgba(255, 255, 255, 1);
+    /* background-color: slategray; */
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+    align-items: center;
+    padding: 2rem 3rem;
+    border-radius: 10px;
+}
+
+.title_container {
+    width: 100%;
+    font-family: var(--myFont);
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.title_container h1 {
+    font-weight: 900;
+}
+
+.choiceAndScore {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 1rem;
+}
+
+.choicebox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 1rem;
+}
+
+.imgbox {
+    height: 7rem;
+    width: 7rem;
+    /* background-color: blue; */
+    border: 2px solid black;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.score {
+    height: 3rem;
+    width: 5rem;
+    border: 2px solid black;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.choiceButton {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.inputButton {
+    height: 2rem;
+    width: 6rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.disable {
+    cursor: not-allowed;
+}
