@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Login</title>
+    <link rel="stylesheet" href="login.css" />
     <script type="module">
       import {
         ref,
@@ -47,9 +48,13 @@
     </script>
   </head>
   <body>
-    <h2>Login Page</h2>
-    <input type="text" id="username" placeholder="Username" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button id="login-button">Login</button>
+    <div class="container">
+      <form action="" class="formclass">
+        <h2 class="title">Login Page</h2>
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button id="login-button">Login</button>
+      </form>
+    </div>
   </body>
 </html>
