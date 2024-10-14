@@ -3,28 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lobby</title>
     <link rel="stylesheet" href="lobby.css" />
     <script type="module" src="lobby.js" defer></script>
-    <title>Lobby</title>
   </head>
   <body>
-    <div class="container">
-      <h2 class="title">Lobby</h2>
-      <div class="content">
-        <div class="online-players">
-          <h3>Online Players:</h3>
-          <div id="online-players-list"></div>
-        </div>
-        <div class="current-user">
-          <h3 id="greeting">Hello,</h3>
-          <button id="start-button">Start</button>
-          <button id="exit-button">Exit</button>
-        </div>
-        <div class="match-making">
-          <h3>Match Making:</h3>
-          <div id="stack-list"></div>
-        </div>
-      </div>
+    <h2>Lobby</h2>
+    <div id="current-username"></div>
+
+    <div>
+      <h3>Online Players: <span id="online-count">0</span></h3>
+      <div id="online-list"></div>
+    </div>
+
+    <div>
+      <h3>Match Making: <span id="stack-count">0</span></h3>
+      <div id="stack-list"></div>
+    </div>
+
+    <div>
+      <button id="start-button">Start</button>
+      <button id="exit-button">Exit</button>
     </div>
   </body>
 </html>
