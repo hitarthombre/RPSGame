@@ -28,7 +28,7 @@
               // Mark user as online
               const updates = {};
               updates["users/" + key + "/online"] = true;
-              update(ref(db), updates);
+              await update(ref(db), updates);
 
               // Redirect to lobby
               window.location.href =
@@ -40,10 +40,16 @@
         alert("Invalid username or password");
       };
 
-      document.getElementById("login-button").addEventListener("click", () => {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-        login(username, password);
+      // Wait for DOM content to load
+      window.addEventListener("DOMContentLoaded", () => {
+        document
+          .getElementById("login-button")
+          .addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent form submission
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            login(username, password);
+          });
       });
     </script>
   </head>
