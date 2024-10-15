@@ -108,7 +108,7 @@
             required />
         </div>
         <div class="input-container email-container">
-          <i class="ri-mail-add-fill"></i>
+          <i class="ri-mail-add-fill" id="emailIcon"></i>
           <!-- <i class="ri-mail-check-fill"></i> -->
           <!-- <i class="ri-mail-close-fill"></i> -->
 
@@ -149,7 +149,7 @@
 
         // Random speeds for each emoji
         let speedX = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
-        let speedY = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
+        let speedY = (Math.random() * 4 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
 
         function moveEmoji() {
           // Update positions
@@ -176,6 +176,34 @@
 
         // Start the movement
         moveEmoji();
+      });
+
+      //signup img change
+
+      const emailInput = document.getElementById("email");
+      const emailIcon = document.getElementById("emailIcon");
+
+      emailInput.addEventListener("input", function () {
+        const emailValue = emailInput.value;
+        if (emailValue === "") {
+          emailIcon.classList.remove("ri-mail-close-fill");
+          emailIcon.classList.remove("ri-mail-check-fill");
+          emailIcon.classList.add("ri-mail-add-fill");
+          // emailIcon.src = "mail.png"; // Empty email field
+        } else if (
+          !emailValue.includes(".") ||
+          emailValue.split(".").pop().length === 0
+        ) {
+          emailIcon.classList.remove("ri-mail-add-fill");
+          emailIcon.classList.remove("ri-mail-check-fill");
+          emailIcon.classList.add("ri-mail-close-fill");
+          //emailIcon.src = "mail-cross.png"; // Email field being filled but no valid domain
+        } else {
+          emailIcon.classList.remove("ri-mail-close-fill");
+          emailIcon.classList.remove("ri-mail-add-fill");
+          emailIcon.classList.add("ri-mail-check-fill");
+          // emailIcon.src = "mail-tick.png"; // Email contains a domain
+        }
       });
     </script>
   </body>
