@@ -98,21 +98,67 @@ const monitorMatchmakingStack = () => {
 const addToStack = () => {
   const stackRef = ref(db, `matchmaking/stack/${username}`);
 
-  // Use set to add the user to the stack
   set(stackRef, true)
     .then(() => {
       console.log(`${username} added to matchmaking stack.`);
+      checkForPair(); // Check for pairs after adding
     })
     .catch((error) => {
       console.error("Error adding to matchmaking stack:", error);
     });
 };
 
-const removeFromStack = () => {
-  const stackRef = ref(db, `matchmaking/stack/${username}`);
-  set(stackRef, null)
+const checkForPair = () => {
+  const matchmakingRef = ref(db, "matchmaking/stack/");
+  get(matchmakingRef).then((snapshot) => {
+    const stackPlayers = snapshot.val() || {};
+    const usernames = Object.keys(stackPlayers);
+
+    if (usernames.length >= 2) {
+      const player1 = usernames[0];
+      const player2 = usernames[1];
+
+      // Create a new room for the pair
+      const roomId = `${player1}_${player2}`; // Simple room ID
+      const roomRef = ref(db, `matchmaking/rooms/${roomId}`);
+      set(roomRef, {
+        players: {
+          [player1]: true,
+          [player2]: true,
+        },
+      })
+        .then(() => {
+          console.log(
+            `Room created for ${player1} and ${player2} with ID: ${roomId}`
+          );
+          // Remove both players from the stack
+          return Promise.all([
+            removeFromStack(player1),
+            removeFromStack(player2),
+          ]);
+        })
+        .then(() => {
+          // Introduce a short delay to ensure Firebase updates are complete
+          setTimeout(() => {
+            // Redirect to the new room page for both users
+            window.location.href = `room.html?roomId=${roomId}&player1=${player1}&player2=${player2}`;
+          }, 1000); // 1 second delay
+        })
+        .catch((error) => {
+          console.error(
+            "Error creating room or removing players from stack:",
+            error
+          );
+        });
+    }
+  });
+};
+
+const removeFromStack = (user) => {
+  const stackRef = ref(db, `matchmaking/stack/${user}`);
+  return set(stackRef, null)
     .then(() => {
-      console.log(`${username} removed from matchmaking stack.`);
+      console.log(`${user} removed from matchmaking stack.`);
     })
     .catch((error) => {
       console.error("Error removing from matchmaking stack:", error);
@@ -126,7 +172,7 @@ document.getElementById("start-button").addEventListener("click", () => {
 
 document.getElementById("exit-button").addEventListener("click", () => {
   console.log("Exit button clicked");
-  removeFromStack();
+  removeFromStack(username);
 });
 
 window.onload = () => {
@@ -145,5 +191,5 @@ window.onload = () => {
 
 window.onbeforeunload = () => {
   clearInterval(pingInterval);
-  removeFromStack(); // Remove user from stack on unload
+  removeFromStack(username); // Remove user from stack on unload
 };

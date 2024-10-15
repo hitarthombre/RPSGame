@@ -14,7 +14,7 @@
       body {
         height: 100vh;
         overflow: hidden;
-        display: flex;
+        /* display: flex; */
         justify-content: center;
         align-items: center;
         background-color: #f0f0f0;
@@ -45,7 +45,7 @@
   <body>
     <div class="emoji-container">
       <!-- The 9 emojis -->
-      <div class="emoji">😀</div>
+      <!-- <div class="emoji">😀</div>
       <div class="emoji">🎉</div>
       <div class="emoji">💻</div>
       <div class="emoji">🚀</div>
@@ -53,7 +53,10 @@
       <div class="emoji">🍕</div>
       <div class="emoji">🐶</div>
       <div class="emoji">🏀</div>
-      <div class="emoji">🎶</div>
+      <div class="emoji">🎶</div> -->
+      <div class="emoji">
+        <img src="/Assests/scissor-cut-unscreen.gif" alt="" />
+      </div>
     </div>
 
     <script>
@@ -70,8 +73,8 @@
         emoji.style.top = `${posY}px`;
 
         // Random speeds for each emoji
-        let speedX = (Math.random() * 4 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
-        let speedY = (Math.random() * 4 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
+        let speedX = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
+        let speedY = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
 
         function moveEmoji() {
           // Update positions
@@ -79,12 +82,12 @@
           posY += speedY;
 
           // Check boundaries for X (left and right walls)
-          if (posX <= 0 || posX + 50 >= containerWidth) {
+          if (posX <= -100 || posX + 100 >= containerWidth) {
             speedX = -speedX; // Reverse direction on X-axis
           }
 
           // Check boundaries for Y (top and bottom walls)
-          if (posY <= 0 || posY + 50 >= containerHeight) {
+          if (posY <= -100 || posY + 100 >= containerHeight) {
             speedY = -speedY; // Reverse direction on Y-axis
           }
 

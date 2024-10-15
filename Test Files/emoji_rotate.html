@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        position: relative;
+      }
+      .emoji {
+        font-size: 2.5rem;
+        position: absolute;
+        top: 20px;
+        animation: rotate 7s linear infinite;
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+          scale: 20%;
+        }
+        50% {
+          transform: rotate(360deg);
+          scale: 100%;
+        }
+        100% {
+          transform: rotate(720deg);
+          scale: 20%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="emoji">😀</div>
+    <div class="emoji">🎉</div>
+    <div class="emoji">💻</div>
+    <div class="emoji">😀</div>
+  </body>
+  <script>
+    const emoji = document.querySelectorAll(".emoji");
+    emoji.forEach((emo) => {
+      emo.style.left = "100px";
+      emo.style.top = "200px";
+    });
+  </script>
+</html>
