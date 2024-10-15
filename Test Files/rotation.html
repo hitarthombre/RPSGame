@@ -17,7 +17,7 @@
         /* display: flex; */
         justify-content: center;
         align-items: center;
-        background-color: #f0f0f0;
+        background-color: #000000;
       }
 
       .emoji-container {
@@ -32,33 +32,66 @@
         animation: rotate 5s linear infinite;
       }
 
+      #s1 {
+        transform: rotate(50deg);
+        height: 10rem;
+      }
+      #s2 {
+        transform: rotate(180deg);
+        height: 10rem;
+      }
+      #s3 {
+        transform: rotate(270deg);
+        height: 10rem;
+      }
+      #s4 {
+        transform: rotate(45deg);
+        height: 10rem;
+      }
+
       @keyframes rotate {
-        from {
+        0% {
           transform: rotate(0deg);
         }
-        to {
+        50% {
           transform: rotate(360deg);
+        }
+        100% {
+          transform: rotate(720deg);
         }
       }
     </style>
   </head>
   <body>
     <div class="emoji-container">
-      <!-- The 9 emojis -->
-      <!-- <div class="emoji">😀</div>
-      <div class="emoji">🎉</div>
-      <div class="emoji">💻</div>
-      <div class="emoji">🚀</div>
-      <div class="emoji">❤️</div>
-      <div class="emoji">🍕</div>
-      <div class="emoji">🐶</div>
-      <div class="emoji">🏀</div>
-      <div class="emoji">🎶</div> -->
       <div class="emoji">
-        <img src="/Assests/scissor-cut-unscreen.gif" alt="" />
-        <img src="/Assests/crumbled_paper.png" alt="" />
-        <img src="/Assests/stone.png" alt="" />
+        <img id="s1" src="/Assests/scissor-cut-unscreen.gif" alt="" />
       </div>
+      <div class="emoji">
+        <img id="s1" src="/Assests/crumbled_paper.png" alt="" />
+      </div>
+      <div class="emoji"><img id="s1" src="/Assests/stone.png" alt="" /></div>
+      <div class="emoji">
+        <img id="s2" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+      </div>
+      <div class="emoji">
+        <img id="s2" src="/Assests/crumbled_paper.png" alt="" />
+      </div>
+      <div class="emoji"><img id="s2" src="/Assests/stone.png" alt="" /></div>
+      <div class="emoji">
+        <img id="s3" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+      </div>
+      <div class="emoji">
+        <img id="s3" src="/Assests/crumbled_paper.png" alt="" />
+      </div>
+      <div class="emoji"><img id="s3" src="/Assests/stone.png" alt="" /></div>
+      <div class="emoji">
+        <img id="s4" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+      </div>
+      <div class="emoji">
+        <img id="s4" src="/Assests/crumbled_paper.png" alt="" />
+      </div>
+      <div class="emoji"><img id="s4" src="/Assests/stone.png" alt="" /></div>
     </div>
 
     <script>
@@ -75,8 +108,8 @@
         emoji.style.top = `${posY}px`;
 
         // Random speeds for each emoji
-        let speedX = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
-        let speedY = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
+        let speedX = (Math.random() * 1 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
+        let speedY = (Math.random() * 1 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
 
         function moveEmoji() {
           // Update positions
