@@ -2,9 +2,10 @@
 <html>
   <head>
     <title>Signup</title>
-    <link rel="stylesheet" href="signup.css">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"
-/>
+    <link rel="stylesheet" href="signup.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+      rel="stylesheet" />
     <script type="module">
       import {
         ref,
@@ -49,41 +50,133 @@
           });
       };
 
-      document.getElementById("signup-button").addEventListener("click", (event) => {
-        event.preventDefault()
-        const username = document.getElementById("username").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        signup(username, email, password);
-      });
+      document
+        .getElementById("signup-button")
+        .addEventListener("click", (event) => {
+          event.preventDefault();
+          const username = document.getElementById("username").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          signup(username, email, password);
+        });
     </script>
   </head>
   <body>
+    <div class="emoji-container">
+      <div class="emoji">
+        <img id="s1" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+      </div>
+      <div class="emoji">
+        <img id="s1" src="/Assests/crumbled_paper.png" alt="" />
+      </div>
+      <div class="emoji"><img id="s1" src="/Assests/stone.png" alt="" /></div>
+      <div class="emoji">
+        <img id="s2" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+      </div>
+      <div class="emoji">
+        <img id="s2" src="/Assests/crumbled_paper.png" alt="" />
+      </div>
+      <div class="emoji"><img id="s2" src="/Assests/stone.png" alt="" /></div>
+      <div class="emoji">
+        <img id="s3" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+      </div>
+      <div class="emoji">
+        <img id="s3" src="/Assests/crumbled_paper.png" alt="" />
+      </div>
+      <div class="emoji"><img id="s3" src="/Assests/stone.png" alt="" /></div>
+      <div class="emoji">
+        <img id="s4" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+      </div>
+      <div class="emoji">
+        <img id="s4" src="/Assests/crumbled_paper.png" alt="" />
+      </div>
+      <div class="emoji"><img id="s4" src="/Assests/stone.png" alt="" /></div>
+    </div>
+
     <div class="container">
       <h1 class="mainTitle">Rock, Paper & Sicssors</h1>
-      <img src="2.png" alt="" class="bg-login">
+      <!-- <img src="2.png" alt="" class="bg-login"> -->
       <form action="" class="formContainer">
         <h2 class="title">Signup</h2>
-            <div class="input-container">
-              <i class="ri-user-fill"></i>
-              <input class="uname" type="text" id="username" placeholder="Username" required />
-            </div>
-        <div class="input-container email-container">
-         
-            <i class="ri-mail-add-fill"></i> 
-            <!-- <i class="ri-mail-check-fill"></i> -->
-            <!-- <i class="ri-mail-close-fill"></i> -->
-         
-          <input class="email-input" type="email" id="email" placeholder="Email" required />
+        <div class="input-container">
+          <i class="ri-user-fill"></i>
+          <input
+            class="uname"
+            type="text"
+            id="username"
+            placeholder="Username"
+            required />
         </div>
-        <div class="input-container password-container ">
+        <div class="input-container email-container">
+          <i class="ri-mail-add-fill"></i>
+          <!-- <i class="ri-mail-check-fill"></i> -->
+          <!-- <i class="ri-mail-close-fill"></i> -->
+
+          <input
+            class="email-input"
+            type="email"
+            id="email"
+            placeholder="Email"
+            required />
+        </div>
+        <div class="input-container password-container">
           <!-- <i class="ri-key-fill"></i>
           <i class="ri-eye-fill"></i> -->
           <i class="ri-eye-close-fill"></i>
-          <input class="password-input" type="password" id="password" placeholder="Password" required />
+          <input
+            class="password-input"
+            type="password"
+            id="password"
+            placeholder="Password"
+            required />
         </div>
         <button id="signup-button" class="signupbtn">Signup</button>
       </form>
     </div>
+
+    <script>
+      const emojis = document.querySelectorAll(".emoji");
+      const container = document.querySelector(".emoji-container");
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
+
+      emojis.forEach((emoji) => {
+        // Set random initial positions
+        let posX = Math.random() * (containerWidth - 50); // Adjusting for emoji size
+        let posY = Math.random() * (containerHeight - 50); // Adjusting for emoji size
+        emoji.style.left = `${posX}px`;
+        emoji.style.top = `${posY}px`;
+
+        // Random speeds for each emoji
+        let speedX = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
+        let speedY = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1); // Random speed between -5 and 5
+
+        function moveEmoji() {
+          // Update positions
+          posX += speedX;
+          posY += speedY;
+
+          // Check boundaries for X (left and right walls)
+          if (posX <= -100 || posX + 100 >= containerWidth) {
+            speedX = -speedX; // Reverse direction on X-axis
+          }
+
+          // Check boundaries for Y (top and bottom walls)
+          if (posY <= -100 || posY + 100 >= containerHeight) {
+            speedY = -speedY; // Reverse direction on Y-axis
+          }
+
+          // Apply the new position to the emoji
+          emoji.style.left = `${posX}px`;
+          emoji.style.top = `${posY}px`;
+
+          // Continue the animation
+          requestAnimationFrame(moveEmoji);
+        }
+
+        // Start the movement
+        moveEmoji();
+      });
+    </script>
   </body>
 </html>

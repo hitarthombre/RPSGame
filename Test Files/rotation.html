@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Random Moving Emojis</title>
+    <link rel="stylesheet" href="/Lobby/signup.css" />
     <style>
       * {
         margin: 0;
@@ -18,18 +19,25 @@
         justify-content: center;
         align-items: center;
         background-color: #000000;
+        position: relative;
+      }
+      .bg-container {
+        position: absolute;
+        z-index: -5;
       }
 
       .emoji-container {
         position: relative;
         width: 100vw;
         height: 100vh;
+        z-index: -4;
       }
 
       .emoji {
         position: absolute;
         font-size: 2.5rem;
         animation: rotate 5s linear infinite;
+        z-index: -3;
       }
 
       #s1 {
@@ -63,37 +71,78 @@
     </style>
   </head>
   <body>
-    <div class="emoji-container">
-      <div class="emoji">
-        <img id="s1" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+    <div class="bg-container">
+      <div class="emoji-container">
+        <div class="emoji">
+          <img id="s1" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+        </div>
+        <div class="emoji">
+          <img id="s1" src="/Assests/crumbled_paper.png" alt="" />
+        </div>
+        <div class="emoji"><img id="s1" src="/Assests/stone.png" alt="" /></div>
+        <div class="emoji">
+          <img id="s2" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+        </div>
+        <div class="emoji">
+          <img id="s2" src="/Assests/crumbled_paper.png" alt="" />
+        </div>
+        <div class="emoji"><img id="s2" src="/Assests/stone.png" alt="" /></div>
+        <div class="emoji">
+          <img id="s3" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+        </div>
+        <div class="emoji">
+          <img id="s3" src="/Assests/crumbled_paper.png" alt="" />
+        </div>
+        <div class="emoji"><img id="s3" src="/Assests/stone.png" alt="" /></div>
+        <div class="emoji">
+          <img id="s4" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+        </div>
+        <div class="emoji">
+          <img id="s4" src="/Assests/crumbled_paper.png" alt="" />
+        </div>
+        <div class="emoji"><img id="s4" src="/Assests/stone.png" alt="" /></div>
       </div>
-      <div class="emoji">
-        <img id="s1" src="/Assests/crumbled_paper.png" alt="" />
-      </div>
-      <div class="emoji"><img id="s1" src="/Assests/stone.png" alt="" /></div>
-      <div class="emoji">
-        <img id="s2" src="/Assests/scissor-cut-unscreen.gif" alt="" />
-      </div>
-      <div class="emoji">
-        <img id="s2" src="/Assests/crumbled_paper.png" alt="" />
-      </div>
-      <div class="emoji"><img id="s2" src="/Assests/stone.png" alt="" /></div>
-      <div class="emoji">
-        <img id="s3" src="/Assests/scissor-cut-unscreen.gif" alt="" />
-      </div>
-      <div class="emoji">
-        <img id="s3" src="/Assests/crumbled_paper.png" alt="" />
-      </div>
-      <div class="emoji"><img id="s3" src="/Assests/stone.png" alt="" /></div>
-      <div class="emoji">
-        <img id="s4" src="/Assests/scissor-cut-unscreen.gif" alt="" />
-      </div>
-      <div class="emoji">
-        <img id="s4" src="/Assests/crumbled_paper.png" alt="" />
-      </div>
-      <div class="emoji"><img id="s4" src="/Assests/stone.png" alt="" /></div>
     </div>
-
+    <div class="container">
+      <div class="main-container">
+        <h1 class="mainTitle">Rock, Paper & Sicssors</h1>
+        <form action="" class="formContainer">
+          <h2 class="title">Signup</h2>
+          <div class="input-container">
+            <input
+              class="uname"
+              type="text"
+              id="username"
+              placeholder="Username"
+              required />
+            <i class="ri-user-fill"></i>
+          </div>
+          <div class="input-container email-container">
+            <i class="ri-mail-add-fill"></i>
+            <!-- <i class="ri-mail-check-fill"></i> -->
+            <!-- <i class="ri-mail-close-fill"></i> -->
+            <input
+              class="email-input"
+              type="email"
+              id="email"
+              placeholder="Email"
+              required />
+          </div>
+          <div class="input-container password-container">
+            <!-- <i class="ri-key-fill"></i>
+            <i class="ri-eye-fill"></i> -->
+            <i class="ri-eye-close-fill"></i>
+            <input
+              class="password-input"
+              type="password"
+              id="password"
+              placeholder="Password"
+              required />
+          </div>
+          <button id="signup-button" class="signupbtn">Signup</button>
+        </form>
+      </div>
+    </div>
     <script>
       const emojis = document.querySelectorAll(".emoji");
       const container = document.querySelector(".emoji-container");

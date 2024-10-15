@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup Page</title>
+    <style>
+      .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .form-group input {
+        padding: 10px;
+        margin-left: 10px;
+        font-size: 16px;
+      }
+
+      .form-group img {
+        width: 24px;
+        height: 24px;
+      }
+
+      .password-container {
+        position: relative;
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="signup-form">
+      <!-- Email Field -->
+      <div class="form-group">
+        <img id="emailIcon" src="mail.png" alt="email icon" />
+        <input type="email" id="email" placeholder="Enter your email" />
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group password-container">
+        <img id="passwordIcon" src="key.png" alt="password icon" />
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password" />
+        <img
+          id="togglePassword"
+          class="toggle-password"
+          src="eye-close.png"
+          alt="toggle visibility" />
+      </div>
+    </div>
+
+    <script>
+      // Email field logic
+      const emailInput = document.getElementById("email");
+      const emailIcon = document.getElementById("emailIcon");
+
+      emailInput.addEventListener("input", function () {
+        const emailValue = emailInput.value;
+        if (emailValue === "") {
+          emailIcon.src = "mail.png"; // Empty email field
+        } else if (
+          !emailValue.includes(".") ||
+          emailValue.split(".").pop().length === 0
+        ) {
+          emailIcon.src = "mail-cross.png"; // Email field being filled but no valid domain
+        } else {
+          emailIcon.src = "mail-tick.png"; // Email contains a domain
+        }
+      });
+
+      // Password field logic
+      const passwordInput = document.getElementById("password");
+      const passwordIcon = document.getElementById("passwordIcon");
+      const togglePassword = document.getElementById("togglePassword");
+
+      passwordInput.addEventListener("input", function () {
+        if (passwordInput.value === "") {
+          passwordIcon.src = "key.png"; // Empty password field
+        } else {
+          passwordIcon.src = "eye-close.png"; // Typing in password
+        }
+      });
+
+      togglePassword.addEventListener("click", function () {
+        const type =
+          passwordInput.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        passwordInput.setAttribute("type", type);
+
+        // Toggle between eye close and eye open icons
+        togglePassword.src =
+          type === "password" ? "eye-close.png" : "eye-open.png";
+      });
+    </script>
+  </body>
+</html>
