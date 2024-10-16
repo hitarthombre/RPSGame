@@ -1,0 +1,61 @@
+body {
+  font-family: "Courier New", Courier, monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f4f4f4;
+}
+
+.container {
+  text-align: center;
+  position: relative;
+}
+
+#username-input {
+  padding: 10px;
+  font-size: 18px;
+  width: 300px;
+  margin-top: 20px;
+}
+
+#username-input:focus {
+  outline: none;
+  border: 2px solid #4caf50;
+}
+
+#welcome-message {
+  font-size: 24px;
+  margin-bottom: 20px;
+  white-space: nowrap;
+  border-right: 2px solid black;
+  display: inline-block;
+  letter-spacing: 2px;
+  opacity: 0;
+  text-align: center;
+  animation: blink-cursor 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+    opacity: 1;
+  }
+  to {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes blink-cursor {
+  50% {
+    border-color: transparent;
+  }
+}
+
+.typing-effect {
+  width: 0;
+  overflow: hidden;
+  animation: typing 2s steps(15, end) forwards;
+}

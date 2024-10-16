@@ -13,6 +13,7 @@ let playerChoice = null;
 let opponentChoice = null;
 let playerScore = 0;
 let opponentScore = 0;
+let isResultChecked = false; // Flag to prevent multiple score updates
 
 const urlParams = new URLSearchParams(window.location.search);
 roomId = urlParams.get("roomId");
@@ -26,22 +27,63 @@ const getUsernameById = async (id) => {
   return users[id]?.username || "Unknown";
 };
 
+// Assign event listeners to buttons
+document
+  .getElementById("rock")
+  .addEventListener("click", () => makeChoice("rock"));
+document
+  .getElementById("paper")
+  .addEventListener("click", () => makeChoice("paper"));
+document
+  .getElementById("scissors")
+  .addEventListener("click", () => makeChoice("scissors"));
+
 const makeChoice = async (choice) => {
   playerChoice = choice;
   await update(roomRef, { [`${playerId}_choice`]: playerChoice });
 
-  // Display the current player's choice immediately
-  document.getElementById(
-    "player1_choice"
-  ).textContent = `Choice: ${playerChoice}`;
-
-  // Fetch opponent's choice to show it
+  // Fetch the latest state of the room
   const snapshot = await get(roomRef);
   const data = snapshot.val();
   opponentChoice = data[`${opponentId}_choice`] || null;
+
+  // Display choices for both players
+  document.getElementById(
+    "player1_choice"
+  ).textContent = `Choice: ${playerChoice}`;
   document.getElementById("player2_choice").textContent = `Choice: ${
-    opponentChoice || "Waiting"
+    opponentChoice || "Waiting for opponent..."
   }`;
+
+  // Check if both players have made their choices
+  if (playerChoice && opponentChoice && !isResultChecked) {
+    checkResult(playerChoice, opponentChoice);
+  }
+};
+
+// Function to calculate result
+const checkResult = (playerChoice, opponentChoice) => {
+  let result;
+  if (playerChoice === opponentChoice) {
+    result = "It's a tie!";
+  } else if (
+    (playerChoice === "rock" && opponentChoice === "scissors") ||
+    (playerChoice === "scissors" && opponentChoice === "paper") ||
+    (playerChoice === "paper" && opponentChoice === "rock")
+  ) {
+    result = "You win!";
+    playerScore++;
+  } else {
+    result = "You lose!";
+    opponentScore++;
+  }
+
+  document.getElementById("result").textContent = result;
+  showPopup(result); // Call function to display result popup
+  updateScore(); // Update the scores after the round is finished
+
+  // Set flag to prevent multiple result checks
+  isResultChecked = true;
 };
 
 const updateScore = async () => {
@@ -58,6 +100,32 @@ const updateScore = async () => {
   ).textContent = `Score: ${opponentScore}`;
 };
 
+// Show result popup and reset choices after a delay
+const showPopup = (result) => {
+  const popup = document.getElementById("result-popup");
+  popup.textContent = result;
+  popup.style.display = "block"; // Show the popup
+
+  // Hide the popup after 3 seconds and reset choices for the next round
+  setTimeout(() => {
+    popup.style.display = "none";
+    resetChoices(); // Reset player choices
+  }, 3000);
+};
+
+const resetChoices = async () => {
+  playerChoice = null;
+  opponentChoice = null;
+  isResultChecked = false; // Reset the flag for the next round
+  await update(roomRef, {
+    [`${playerId}_choice`]: null,
+    [`${opponentId}_choice`]: null,
+  });
+
+  document.getElementById("player1_choice").textContent = `Choice: Waiting...`;
+  document.getElementById("player2_choice").textContent = `Choice: Waiting...`;
+};
+
 // Listen for room updates
 onValue(roomRef, async (snapshot) => {
   const data = snapshot.val();
@@ -71,22 +139,38 @@ onValue(roomRef, async (snapshot) => {
       "player2_name"
     ).textContent = `Opponent: ${player2Name}`;
 
-    document.getElementById("player1_choice").textContent = `Choice: ${
-      data[`${playerId}_choice`] || "Waiting"
-    }`;
-    document.getElementById("player2_choice").textContent = `Choice: ${
-      data[`${opponentId}_choice`] || "Waiting"
-    }`;
-    document.getElementById("player1_score").textContent = `Score: ${
-      data[`${playerId}_score`] || 0
-    }`;
-    document.getElementById("player2_score").textContent = `Score: ${
-      data[`${opponentId}_score`] || 0
-    }`;
-    document.getElementById("result").textContent = data.win || "";
+    // Update choices and scores from the database
+    playerChoice = data[`${playerId}_choice`] || null;
+    opponentChoice = data[`${opponentId}_choice`] || null;
 
-    opponentChoice = data[`${opponentId}_choice`];
+    // If both players have made their choices, show them
+    if (playerChoice && opponentChoice) {
+      document.getElementById(
+        "player1_choice"
+      ).textContent = `Choice: ${playerChoice}`;
+      document.getElementById(
+        "player2_choice"
+      ).textContent = `Choice: ${opponentChoice}`;
+      if (!isResultChecked) {
+        checkResult(playerChoice, opponentChoice); // Check result only if not done
+      }
+    } else {
+      document.getElementById(
+        "player1_choice"
+      ).textContent = `Choice: Waiting for opponent...`;
+      document.getElementById(
+        "player2_choice"
+      ).textContent = `Choice: Waiting for opponent...`;
+    }
+
     playerScore = data[`${playerId}_score`] || 0;
     opponentScore = data[`${opponentId}_score`] || 0;
+
+    document.getElementById(
+      "player1_score"
+    ).textContent = `Score: ${playerScore}`;
+    document.getElementById(
+      "player2_score"
+    ).textContent = `Score: ${opponentScore}`;
   }
 });
