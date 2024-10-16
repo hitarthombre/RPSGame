@@ -1,0 +1,29 @@
+#game-room {
+  text-align: center;
+  margin-top: 50px;
+}
+
+#player-info {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.player {
+  width: 45%;
+  border: 1px solid #000;
+  padding: 10px;
+}
+
+#game-buttons button {
+  margin: 5px;
+}
+
+#result {
+  margin-top: 20px;
+  font-size: 1.2em;
+}
+
+#score-board {
+  margin-top: 30px;
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Room</title>
+    <link rel="stylesheet" href="room.css" />
+    <script type="module" src="room.js" defer></script>
+  </head>
+  <body>
+    <div id="game-room">
+      <h2>Game Room</h2>
+      <div id="player-info">
+        <div id="player1" class="player">
+          <div id="player1_name"></div>
+          <div id="player1_choice">Choice: Waiting</div>
+          <div id="player1_score">Score: 0</div>
+        </div>
+        <div id="player2" class="player">
+          <div id="player2_name"></div>
+          <div id="player2_choice">Choice: Waiting</div>
+          <div id="player2_score">Score: 0</div>
+        </div>
+      </div>
+      <div id="game-buttons">
+        <button id="rock" onclick="makeChoice('rock')">Rock</button>
+        <button id="paper" onclick="makeChoice('paper')">Paper</button>
+        <button id="scissors" onclick="makeChoice('scissors')">Scissors</button>
+      </div>
+      <div id="result"></div>
+      <div>
+        <button id="exit-button">Exit</button>
+      </div>
+    </div>
+  </body>
+</html>
