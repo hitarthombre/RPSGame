@@ -33,6 +33,7 @@ body {
   top: 2rem;
   font-size: 5rem;
   letter-spacing: 2px;
+
 }
 .bg-login {
   position: absolute;
@@ -44,6 +45,7 @@ body {
 .formContainer {
   color: #fff;
   width: 30%;
+  height: 60%;
   position: absolute;
   /* z-index: 9; */
   /* background-color:#FFFF; */
@@ -51,12 +53,13 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
   padding: 1rem;
   border-radius: 10px;
   backdrop-filter: blur(10px);
   border: 1px solid #fff;
-  margin-left: 3rem;
+  margin-top: 5%;
+
 }
 .title {
   font-size: 3rem;
@@ -115,6 +118,17 @@ body {
   background-color: #c4b5aa;
   font-size: 1.2rem;
   border: none;
+}
+.link-container{
+  letter-spacing: 1px;
+}
+.link-container a{
+  text-decoration: none;
+  color: #44413f;
+}
+.link-container a:hover{
+  color: #827d79;
+  transition: all .2s;
 }
 /* .ulable{
     position: relative;

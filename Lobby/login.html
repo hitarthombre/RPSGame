@@ -1,66 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Login</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock, Paper & Scissors - Log In</title>
     <link rel="stylesheet" href="login.css" />
-    <script type="module">
-      import {
-        ref,
-        get,
-        child,
-        update,
-      } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-      import { db } from "./firebaseConfig.js";
-
-      const login = async (username, password) => {
-        const dbRef = ref(db);
-        const snapshot = await get(child(dbRef, `users/`));
-
-        if (snapshot.exists()) {
-          const users = snapshot.val();
-          for (let key in users) {
-            if (
-              users[key].username === username &&
-              users[key].password === password
-            ) {
-              alert("Login successful");
-
-              // Mark user as online
-              const updates = {};
-              updates["users/" + key + "/online"] = true;
-              await update(ref(db), updates);
-
-              // Redirect to lobby
-              window.location.href =
-                "lobby.html?username=" + encodeURIComponent(username);
-              return;
-            }
-          }
-        }
-        alert("Invalid username or password");
-      };
-
-      // Wait for DOM content to load
-      window.addEventListener("DOMContentLoaded", () => {
-        document
-          .getElementById("login-button")
-          .addEventListener("click", (event) => {
-            event.preventDefault(); // Prevent form submission
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-            login(username, password);
-          });
-      });
-    </script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+      rel="stylesheet" />
+    <script type="module" src="login.js" defer></script>
   </head>
   <body>
+    <!-- Background animation -->
+    <div class="emoji-container">
+      <div class="emoji">
+        <img id="s1" src="/Assests/scissor-cut-unscreen.gif" alt="Scissor" />
+      </div>
+      <div class="emoji">
+        <img id="s1" src="/Assests/crumbled_paper.png" alt="Paper" />
+      </div>
+      <div class="emoji">
+        <img id="s1" src="/Assests/stone.png" alt="Stone" />
+      </div>
+      <div class="emoji">
+        <img id="s2" src="/Assests/scissor-cut-unscreen.gif" alt="Scissor" />
+      </div>
+      <div class="emoji">
+        <img id="s2" src="/Assests/crumbled_paper.png" alt="Paper" />
+      </div>
+      <div class="emoji">
+        <img id="s2" src="/Assests/stone.png" alt="Stone" />
+      </div>
+      <div class="emoji">
+        <img id="s3" src="/Assests/scissor-cut-unscreen.gif" alt="Scissor" />
+      </div>
+      <div class="emoji">
+        <img id="s3" src="/Assests/crumbled_paper.png" alt="Paper" />
+      </div>
+      <div class="emoji">
+        <img id="s3" src="/Assests/stone.png" alt="Stone" />
+      </div>
+      <div class="emoji">
+        <img id="s4" src="/Assests/scissor-cut-unscreen.gif" alt="Scissor" />
+      </div>
+      <div class="emoji">
+        <img id="s4" src="/Assests/crumbled_paper.png" alt="Paper" />
+      </div>
+      <div class="emoji">
+        <img id="s4" src="/Assests/stone.png" alt="Stone" />
+      </div>
+    </div>
+
+    <!-- Form -->
     <div class="container">
-      <img src="/Assests/login.gif" alt="bg" class="bgimg" />
-      <form action="" class="formclass">
-        <h2 class="title">Login Page</h2>
-        <input type="text" id="username" placeholder="Username" required />
-        <input type="password" id="password" placeholder="Password" required />
-        <button id="login-button">Login</button>
+      <h1 class="mainTitle">Rock, Paper & Scissors</h1>
+
+      <form action="" class="formContainer">
+        <h2 class="title">LogIn</h2>
+        <h1 id="welcome-message"></h1>
+        <div class="input-container">
+          <i class="ri-user-fill"></i>
+          <input
+            class="uname"
+            type="text"
+            id="username"
+            placeholder="Username"
+            required />
+        </div>
+        <div class="input-container password-container">
+          <i id="passwordIcon" class="ri-key-fill"></i>
+          <input
+            class="password-input"
+            type="password"
+            id="password"
+            placeholder="Password"
+            required />
+        </div>
+        <button id="signup-button" class="signupbtn">LogIn</button>
+        <div class="link-container">
+          Do not have an account?
+          <a href="/Lobby/signup.html">Create Account</a>
+        </div>
       </form>
     </div>
   </body>

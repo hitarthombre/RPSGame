@@ -107,3 +107,43 @@ emailInput.addEventListener("input", function () {
     emailIcon.classList.add("ri-mail-check-fill");
   }
 });
+
+
+
+
+      // Password field logic
+      const passwordInput = document.getElementById("password");
+      const passwordIcon = document.getElementById("passwordIcon");
+   
+
+      passwordInput.addEventListener("input", function () {
+        if (passwordInput.value === "") {
+            passwordIcon.classList.remove("ri-eye-close-fill");
+            passwordIcon.classList.add("ri-key-fill");
+       
+        } else {
+            passwordIcon.classList.remove("ri-key-fill");
+            passwordIcon.classList.add("ri-eye-close-fill");
+        }
+      });
+
+      passwordIcon.addEventListener("click", function () {
+        const type =
+          passwordInput.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        passwordInput.setAttribute("type", type);
+
+        // Toggle between eye close and eye open icons
+        passwordIcon.classList.remove("ri-key-fill",'ri-eye-close-fill');
+            passwordIcon.classList.add("ri-eye-fill");
+        
+       if(type === "password"){
+        passwordIcon.classList.remove("ri-key-fill","ri-eye-fill");
+        passwordIcon.classList.add("ri-eye-close-fill");
+       }
+       else{
+        passwordIcon.classList.remove("ri-key-fill","ri-eye-close-fill");
+        passwordIcon.classList.add("ri-eye-fill");
+       }
+      });

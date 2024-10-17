@@ -1,59 +1,215 @@
-.container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
+@import url("https://fonts.googleapis.com/css2?family=Chewy&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html,
 body {
   height: 100%;
   width: 100%;
-}
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-.formclass {
-  width: 30%;
-  padding: 20px;
-  /* background-color: #ffffff; */
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  backdrop-filter: blur(5px);
-  position: absolute;
-  z-index: 9;
-}
-.title {
-  font-size: 3rem;
+  font-family: "Chewy", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  background-color: black;
+  position: relative;
+  overflow: hidden;
 }
 
-.formclass input {
-  width: 70%;
-  height: 2rem;
-  padding: 0.5rem;
-  outline: none;
-  background-color: transparent !important;
-  border-color: rgba(98, 86, 86, 0.29);
-  backdrop-filter: blur(30px);
-}
-#login-button {
-  width: 4rem;
-  height: 2rem;
-  outline: none;
-  background-color: transparent !important;
-  border-color: rgba(98, 86, 86, 0.29);
-}
-.bgimg {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  z-index: -1;
-}
+/* form styling starts from here */
+.container {
+    height: 100%;
+    width: 100%;
+    /* background-color: #343434; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+  }
+  .mainTitle {
+    position: absolute;
+    /* z-index: 10; */
+    color: #fff;
+    top: 2rem;
+    font-size: 5rem;
+    letter-spacing: 2px;
+
+  }
+  .bg-login {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    /* z-index: -1; */
+  }
+  
+  .formContainer {
+    color: #fff;
+    width: 30%;
+    position: absolute;
+    /* z-index: 9; */
+    /* background-color:#FFFF; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 1rem;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 1px solid #fff;
+    margin-top: 4rem;
+  }
+  .title {
+    font-size: 3rem;
+    letter-spacing: 2px;
+   
+  }
+  .input-container {
+    width: 70%;
+    position: relative;
+  }
+  .input-container .uname {
+    width: 100%;
+  }
+  .input-container i {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+  }
+
+  .password-container .password-input {
+    width: 100%;
+  }
+  
+  .formContainer input {
+    color: #fff;
+    font-family: "Chewy", system-ui;
+    width: 70%;
+    height: 2.5rem;
+    padding: 0.5rem;
+    outline: none;
+    border: 1px solid #fff;
+    background-color: transparent;
+    letter-spacing: 2px;
+    /* backdrop-filter: blur(10px); */
+    border-radius: 5px;
+  }
+  
+  .signupbtn {
+    font-family: "Chewy", system-ui;
+    letter-spacing: 2px;
+    height: 2rem;
+    width: 6rem;
+    border-radius: 25px;
+    background-color: #c4b5aa;
+    font-size: 1.2rem;
+    border: none;
+  }
+  .link-container{
+    letter-spacing: 1px;
+  }
+  .link-container a{
+    text-decoration: none;
+    color: #44413f;
+  }
+  .link-container a:hover{
+    color: #827d79;
+    transition: all .2s;
+  }
+
+
+
+
+/* background animation styling starts from here */
+.emoji-container {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  .emoji {
+    position: absolute;
+    font-size: 2.5rem;
+    animation: rotate 5s linear infinite;
+  }
+  
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  #s1 {
+    transform: rotate(50deg);
+    height: 10rem;
+  }
+  #s2 {
+    transform: rotate(180deg);
+    height: 10rem;
+  }
+  #s3 {
+    transform: rotate(270deg);
+    height: 10rem;
+  }
+  #s4 {
+    transform: rotate(45deg);
+    height: 10rem;
+  }
+  
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(360deg);
+    }
+    100% {
+      transform: rotate(720deg);
+    }
+  }
+
+
+  
+
+  
+
+  
+  #welcome-message {
+    font-size: 24px;
+    white-space: nowrap;
+    display: inline-block;
+    letter-spacing: 2px;
+    opacity: 0;
+    text-align: center;
+    animation: blink-cursor 0.75s step-end infinite;
+  }
+  
+  @keyframes typing {
+    from {
+      width: 0;
+      opacity: 1;
+    }
+    to {
+      width: 100%;
+      opacity: 1;
+    }
+  }
+  
+  @keyframes blink-cursor {
+    50% {
+      border-color: transparent;
+    }
+  }
+  
+  .typing-effect {
+    width: 0;
+    overflow: hidden;
+    animation: typing 2s steps(15, end) forwards;
+  }
+  
