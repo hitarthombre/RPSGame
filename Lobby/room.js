@@ -40,14 +40,34 @@ document
 
 const makeChoice = async (choice) => {
   playerChoice = choice;
+
+  // Update the choice in the database
   await update(roomRef, { [`${playerId}_choice`]: playerChoice });
 
-  // Fetch the latest state of the room
+  // Immediately update the player's choice display
+  document.getElementById(
+    "player1_choice"
+  ).textContent = `Choice: ${playerChoice}`;
+
+  // Fetch the latest state of the room to get the opponent's choice
   const snapshot = await get(roomRef);
   const data = snapshot.val();
   opponentChoice = data[`${opponentId}_choice`] || null;
 
-  // Display choices for both players
+  // Check if both players have made their choices
+  if (playerChoice && opponentChoice && !isResultChecked) {
+    revealChoicesAndCheckResult(); // Reveal both choices and check the result
+  } else if (!opponentChoice) {
+    // If the opponent has not made a choice yet, show waiting message
+    document.getElementById(
+      "player2_choice"
+    ).textContent = `Choice: Waiting for opponent...`;
+  }
+};
+
+// Reveal both players' choices simultaneously and check the result
+const revealChoicesAndCheckResult = () => {
+  // Reveal both players' choices
   document.getElementById(
     "player1_choice"
   ).textContent = `Choice: ${playerChoice}`;
@@ -55,10 +75,8 @@ const makeChoice = async (choice) => {
     opponentChoice || "Waiting for opponent..."
   }`;
 
-  // Check if both players have made their choices
-  if (playerChoice && opponentChoice && !isResultChecked) {
-    checkResult(playerChoice, opponentChoice);
-  }
+  // Calculate the result once both players' choices are revealed
+  checkResult(playerChoice, opponentChoice);
 };
 
 // Function to calculate result
@@ -78,7 +96,6 @@ const checkResult = (playerChoice, opponentChoice) => {
     opponentScore++;
   }
 
-  document.getElementById("result").textContent = result;
   showPopup(result); // Call function to display result popup
   updateScore(); // Update the scores after the round is finished
 
@@ -143,24 +160,9 @@ onValue(roomRef, async (snapshot) => {
     playerChoice = data[`${playerId}_choice`] || null;
     opponentChoice = data[`${opponentId}_choice`] || null;
 
-    // If both players have made their choices, show them
-    if (playerChoice && opponentChoice) {
-      document.getElementById(
-        "player1_choice"
-      ).textContent = `Choice: ${playerChoice}`;
-      document.getElementById(
-        "player2_choice"
-      ).textContent = `Choice: ${opponentChoice}`;
-      if (!isResultChecked) {
-        checkResult(playerChoice, opponentChoice); // Check result only if not done
-      }
-    } else {
-      document.getElementById(
-        "player1_choice"
-      ).textContent = `Choice: Waiting for opponent...`;
-      document.getElementById(
-        "player2_choice"
-      ).textContent = `Choice: Waiting for opponent...`;
+    // Only reveal both choices if both players have made them
+    if (playerChoice && opponentChoice && !isResultChecked) {
+      revealChoicesAndCheckResult(); // Check result only if not done
     }
 
     playerScore = data[`${playerId}_score`] || 0;
