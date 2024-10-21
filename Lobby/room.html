@@ -5,32 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Game Room</title>
     <link rel="stylesheet" href="room.css" />
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    rel="stylesheet" />
     <script type="module" src="room.js" defer></script>
   </head>
   <body>
+    <img src="/Assests/hands1234.gif" alt="" class="bg_img">
     <div id="game-room">
       <h2>Game Room</h2>
       <div id="player-info">
         <div id="player1" class="player">
           <div id="player1_name"></div>
-          <div id="player1_choice">Choice: Waiting</div>
+          <div id="player1_choice" class="choice">Choice: Waiting</div>
           <div id="player1_score">Score: 0</div>
         </div>
         <div id="player2" class="player">
           <div id="player2_name"></div>
-          <div id="player2_choice">Choice: Waiting</div>
+          <div id="player2_choice" class="choice">Choice: Waiting</div>
           <div id="player2_score">Score: 0</div>
         </div>
       </div>
       <div id="game-buttons">
-        <button id="rock">Rock</button>
-        <button id="paper">Paper</button>
-        <button id="scissors">Scissors</button>
+        <button id="rock"><img src="/Assests/rock.png" alt="rock" class="choice_img"></button>
+        <button id="paper"><img src="/Assests/paper.png" alt="paper" class="choice_img"></button>
+        <button id="scissors"><img src="/Assests/scissors.png" alt="scissors" class="choice_img"></button>
       </div>
+      <div class="exit-button-container"><button id="exit-button"><i class="ri-corner-down-left-line"></i></button></div>
       <div id="result"></div>
-      <div>
-        <button id="exit-button">Exit</button>
-      </div>
     </div>
 
     <!-- Result Popup -->

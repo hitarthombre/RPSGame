@@ -11,34 +11,69 @@
     <script type="module" src="lobby.js" defer></script>
   </head>
   <body>
-    <h2>Lobby</h2>
 
-    <!-- Player Profile Tab -->
-    <div id="player-profile">
-      <h3>Player Profile</h3>
-      <div><strong>Name:</strong> <span id="profile-username"></span></div>
-      <div>
-        <strong>Total Matches:</strong> <span id="total-matches"></span>
+    <div class="emoji-container">
+      <div class="emoji">
+        <img id="s1" src="/Assests/scissor-cut-unscreen.gif" alt="" />
       </div>
-      <div><strong>Total Wins:</strong> <span id="total-wins"></span></div>
-      <div><strong>Total Losses:</strong> <span id="total-losses"></span></div>
-      <div><strong>Win Ratio:</strong> <span id="win-ratio"></span></div>
+      <div class="emoji">
+        <img id="s1" src="/Assests/crumbled_paper.png" alt="" />
+      </div>
+      <div class="emoji"><img id="s1" src="/Assests/stone.png" alt="" /></div>
+      <div class="emoji">
+        <img id="s2" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+      </div>
+      <div class="emoji">
+        <img id="s2" src="/Assests/crumbled_paper.png" alt="" />
+      </div>
+      <div class="emoji"><img id="s2" src="/Assests/stone.png" alt="" /></div>
+      <div class="emoji">
+        <img id="s3" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+      </div>
+      <div class="emoji">
+        <img id="s3" src="/Assests/crumbled_paper.png" alt="" />
+      </div>
+      <div class="emoji"><img id="s3" src="/Assests/stone.png" alt="" /></div>
+      <div class="emoji">
+        <img id="s4" src="/Assests/scissor-cut-unscreen.gif" alt="" />
+      </div>
+      <div class="emoji">
+        <img id="s4" src="/Assests/crumbled_paper.png" alt="" />
+      </div>
+      <div class="emoji"><img id="s4" src="/Assests/stone.png" alt="" /></div>
     </div>
 
-    <div id="current-username"></div>
-    <div>
-      <h3>Online Players: <span id="online-count">0</span></h3>
-      <div id="online-list"></div>
+
+    <div class="lobby_container">
+      <h2>Lobby</h2>
+      <!-- Player Profile Tab -->
+      <div class="middel_section">
+        <div id="player-profile">
+          <h3 class="profile_heading">Player Profile :</h3>
+          <div><strong>Name:</strong> <span id="profile-username"></span></div>
+          <div>
+            <strong>Total Matches :</strong> <span id="total-matches"></span>
+          </div>
+          <div><strong>Total Wins :</strong> <span id="total-wins"></span></div>
+          <div><strong>Total Losses :</strong> <span id="total-losses"></span></div>
+          <div><strong>Win Ratio :</strong> <span id="win-ratio"></span></div>
+        </div>
+        <div class="online_players_container">
+          <div id="current-username"></div>
+          <div class="online_info">
+            <h3>Online Players: <span id="online-count">0</span></h3>
+            <div id="online-list"></div>
+          </div>
+        </div>
+      </div>
+      <div class="button_container">
+        <button id="start-button">Start Game</button>
+        <button id="exit-button">Exit</button>
+      </div>
+      <button class="mute-button">
+        <i class="ri-volume-mute-fill" id="muteButton"></i>
+      </button>
+      <!-- <i class="ri-volume-up-fill"></i> -->
     </div>
-    <div>
-      <button id="start-button">Start Game</button>
-    </div>
-    <div>
-      <button id="exit-button">Exit</button>
-    </div>
-    <button class="mute-button">
-      <i class="ri-volume-mute-fill" id="muteButton"></i>
-    </button>
-    <!-- <i class="ri-volume-up-fill"></i> -->
   </body>
 </html>

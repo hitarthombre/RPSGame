@@ -1,20 +1,53 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
+@import url("https://fonts.googleapis.com/css2?family=Chewy&display=swap");
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+ 
+ 
+html,body{
+height:100%;
+width:100%;
+overflow: hidden;
+position: relative;
+background-color: black;
+color: #fff;
+font-family: "Chewy", system-ui;
+font-weight: 400;
+font-style: normal;
 }
 
+.lobby_container{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
 h2 {
   text-align: center;
+  font-size: 4rem;
+  margin: 1rem 0;
 }
-
-#online-list,
-#stack-list {
-  border: 1px solid #ccc;
+.online_info{
+  width: 100%;
+  
+}
+.online_info h3{
+  color: rgb(222, 95, 95);
+}
+span{
+  color: #fff;
+}
+#online-list {
   padding: 10px;
   margin-top: 10px;
   max-height: 200px;
   overflow-y: auto;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #ffffff;
+  scroll-behavior: smooth;
 }
 
 #current-username {
@@ -26,7 +59,20 @@ h2 {
   border: 1px solid #ccc;
   padding: 15px;
   margin-bottom: 20px;
-  background-color: #f9f9f9;
+  height: 80%;
+width: 30%;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+align-items: start;
+font-size: 1.5rem;
+  /* background-color: #f9f9f9; */
+  border-radius: 10px;
+background-color: #ffffff38;
+letter-spacing: 1px;
+}
+strong{
+  color: rgb(222, 95, 95);
 }
 
 #player-profile h3 {
@@ -34,9 +80,24 @@ h2 {
 }
 
 button {
-  margin: 5px;
-  padding: 10px 15px;
-  font-size: 16px;
+  font-family: "Chewy", system-ui;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+#start-button{
+  width: 8rem;
+  height: 2rem;
+}
+#exit-button{
+  width: 5rem;
+  height: 2rem;
+}
+.button_container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 
 .mute-button {
@@ -50,4 +111,81 @@ button {
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
+}
+
+.middel_section{
+  height: 60%;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  /* border: 1px solid #fff;   */
+}
+.profile_heading{
+  color: rgb(198, 50, 50);
+  font-size: 2.5rem;
+}
+.online_players_container{
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 20px;
+  height: 80%;
+width: 30%;
+display: flex;
+flex-direction: column;
+align-items: start;
+font-size: 1.5rem;
+border: 1px solid #fff;
+border-radius: 10px;
+background-color: #ffffff38;
+}
+
+.emoji-container {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+
+.emoji {
+  position: absolute;
+  font-size: 2.5rem;
+  animation: rotate 5s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#s1 {
+  transform: rotate(50deg);
+  height: 10rem;
+}
+#s2 {
+  transform: rotate(180deg);
+  height: 10rem;
+}
+#s3 {
+  transform: rotate(270deg);
+  height: 10rem;
+}
+#s4 {
+  transform: rotate(45deg);
+  height: 10rem;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(720deg);
+  }
 }

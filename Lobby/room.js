@@ -43,9 +43,12 @@ document
 const makeChoice = async (choice) => {
   playerChoice = choice;
   await update(roomRef, { [`${playerId}_choice`]: playerChoice });
+  // document.getElementById(
+  //   "player1_choice"
+  // ).textContent = `Choice: ${playerChoice}`;
   document.getElementById(
     "player1_choice"
-  ).textContent = `Choice: ${playerChoice}`;
+  ).innerHTML=`<img src="/Assests/${playerChoice}.png" alt="">`;
 
   // Fetch opponent's choice
   const snapshot = await get(roomRef);
@@ -62,12 +65,25 @@ const makeChoice = async (choice) => {
 };
 
 const revealChoicesAndCheckResult = () => {
+  // document.getElementById(
+  //   "player1_choice"
+  // ).textContent = `Choice: ${playerChoice}`;
   document.getElementById(
     "player1_choice"
-  ).textContent = `Choice: ${playerChoice}`;
-  document.getElementById("player2_choice").textContent = `Choice: ${
-    opponentChoice || "Waiting for opponent..."
-  }`;
+  ).innerHTML=`<img src="/Assests/${playerChoice}.png" alt="">`;
+
+  // document.getElementById("player2_choice").textContent = `Choice: ${
+  //   opponentChoice || "Waiting for opponent..."
+  // }`;
+  let player2Choice = document.getElementById("player2_choice")
+  if(opponentChoice){
+   player2Choice.innerHTML=`<img src="/Assests/${opponentChoice}.png" alt="">`;
+  }
+  else{
+    player2Choice.innerHTML = "Waiting for opponent..."
+  }
+  
+  
   checkResult(playerChoice, opponentChoice);
 };
 

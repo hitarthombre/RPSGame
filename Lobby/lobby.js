@@ -235,3 +235,41 @@ window.addEventListener("load", () => {
     muteButton.classList.add("ri-volume-up-fill");
   }
 });
+
+
+
+
+
+const animateEmojis = () => {
+  const emojis = document.querySelectorAll(".emoji");
+  const container = document.querySelector(".emoji-container");
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
+
+  emojis.forEach((emoji) => {
+    let posX = Math.random() * (containerWidth - 50); // Adjusting for emoji size
+    let posY = Math.random() * (containerHeight - 50);
+    emoji.style.left = `${posX}px`;
+    emoji.style.top = `${posY}px`;
+
+    let speedX = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1);
+    let speedY = (Math.random() * 4 + 1) * (Math.random() > 0.5 ? 1 : -1);
+
+    const moveEmoji = () => {
+      posX += speedX;
+      posY += speedY;
+
+      if (posX <= -100 || posX + 100 >= containerWidth) speedX = -speedX;
+      if (posY <= -100 || posY + 100 >= containerHeight) speedY = -speedY;
+
+      emoji.style.left = `${posX}px`;
+      emoji.style.top = `${posY}px`;
+
+      requestAnimationFrame(moveEmoji);
+    };
+
+    moveEmoji();
+  });
+};
+
+animateEmojis();
