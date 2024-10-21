@@ -3,6 +3,7 @@ import {
   update,
   onValue,
   get,
+  remove,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 import { db } from "./firebaseConfig.js";
 
@@ -14,6 +15,7 @@ let opponentChoice = null;
 let playerScore = 0;
 let opponentScore = 0;
 let isResultChecked = false; // Flag to prevent multiple score updates
+let hasStatsUpdated = false; // Flag to prevent multiple stats updates
 
 const urlParams = new URLSearchParams(window.location.search);
 roomId = urlParams.get("roomId");
@@ -40,46 +42,35 @@ document
 
 const makeChoice = async (choice) => {
   playerChoice = choice;
-
-  // Update the choice in the database
   await update(roomRef, { [`${playerId}_choice`]: playerChoice });
-
-  // Immediately update the player's choice display
   document.getElementById(
     "player1_choice"
   ).textContent = `Choice: ${playerChoice}`;
 
-  // Fetch the latest state of the room to get the opponent's choice
+  // Fetch opponent's choice
   const snapshot = await get(roomRef);
   const data = snapshot.val();
   opponentChoice = data[`${opponentId}_choice`] || null;
 
-  // Check if both players have made their choices
   if (playerChoice && opponentChoice && !isResultChecked) {
-    revealChoicesAndCheckResult(); // Reveal both choices and check the result
+    revealChoicesAndCheckResult();
   } else if (!opponentChoice) {
-    // If the opponent has not made a choice yet, show waiting message
     document.getElementById(
       "player2_choice"
     ).textContent = `Choice: Waiting for opponent...`;
   }
 };
 
-// Reveal both players' choices simultaneously and check the result
 const revealChoicesAndCheckResult = () => {
-  // Reveal both players' choices
   document.getElementById(
     "player1_choice"
   ).textContent = `Choice: ${playerChoice}`;
   document.getElementById("player2_choice").textContent = `Choice: ${
     opponentChoice || "Waiting for opponent..."
   }`;
-
-  // Calculate the result once both players' choices are revealed
   checkResult(playerChoice, opponentChoice);
 };
 
-// Function to calculate result
 const checkResult = (playerChoice, opponentChoice) => {
   let result;
   if (playerChoice === opponentChoice) {
@@ -96,11 +87,73 @@ const checkResult = (playerChoice, opponentChoice) => {
     opponentScore++;
   }
 
-  showPopup(result); // Call function to display result popup
-  updateScore(); // Update the scores after the round is finished
+  updateScore(); // Update score immediately
 
-  // Set flag to prevent multiple result checks
+  if (playerScore >= 3) {
+    endGame(playerId, opponentId, "You won the match!", "You lost the match!");
+  } else if (opponentScore >= 3) {
+    endGame(opponentId, playerId, "You lost the match!", "You won the match!");
+  } else {
+    showPopup(result);
+  }
+
   isResultChecked = true;
+};
+
+const endGame = async (winnerId, loserId, winnerMessage, loserMessage) => {
+  if (hasStatsUpdated) return; // Prevent multiple updates
+
+  const winnerUsername = await getUsernameById(winnerId);
+  const loserUsername = await getUsernameById(loserId);
+
+  showPopup(`${winnerUsername}, ${winnerMessage}`);
+  hasStatsUpdated = true; // Set the flag to prevent further updates
+
+  // Wait for the popup to show before updating stats and redirecting
+  setTimeout(async () => {
+    // Update winner stats
+    const redirectUsername = await getUsernameById(playerId);
+    if (winnerId == playerId) {
+      // p1 === winner // p2 === loser
+      // p1 === p1 // p1 === p2
+      await updateUserStats(winnerId, true); // Pass true for winner
+    } else {
+      // p1 === loser
+      // Update loser stats
+      await updateUserStats(loserId, false); // Pass false for loser
+    }
+    await remove(roomRef); // Remove room
+
+    // Redirect to lobby with the current player's username
+
+    window.location.href = `/Lobby/lobby.html?username=${redirectUsername}`;
+  }, 1500); // Reduced delay to 1.5 seconds
+};
+
+const updateUserStats = async (playerId, isWinner) => {
+  const playerRef = ref(db, `users/${playerId}`);
+
+  const playerSnapshot = await get(playerRef);
+  const playerData = playerSnapshot.val();
+
+  // Default to 0 if the values don't exist yet
+  const totalMatches = playerData?.totalMatches || 0;
+  const totalWins = playerData?.totalWins || 0;
+  const totalLosses = playerData?.totalLosses || 0;
+
+  // Increment match played and either wins or losses
+  const updates = {
+    totalMatches: totalMatches + 1,
+  };
+
+  if (isWinner) {
+    updates.totalWins = totalWins + 1;
+  } else {
+    updates.totalLosses = totalLosses + 1;
+  }
+
+  // Apply the updates to the player's record
+  await update(playerRef, updates);
 };
 
 const updateScore = async () => {
@@ -117,23 +170,22 @@ const updateScore = async () => {
   ).textContent = `Score: ${opponentScore}`;
 };
 
-// Show result popup and reset choices after a delay
 const showPopup = (result) => {
   const popup = document.getElementById("result-popup");
   popup.textContent = result;
-  popup.style.display = "block"; // Show the popup
+  popup.style.display = "block";
 
-  // Hide the popup after 3 seconds and reset choices for the next round
   setTimeout(() => {
     popup.style.display = "none";
-    resetChoices(); // Reset player choices
-  }, 3000);
+    resetChoices();
+  }, 1500); // Reduced delay to 1.5 seconds
 };
 
 const resetChoices = async () => {
   playerChoice = null;
   opponentChoice = null;
-  isResultChecked = false; // Reset the flag for the next round
+  isResultChecked = false;
+
   await update(roomRef, {
     [`${playerId}_choice`]: null,
     [`${opponentId}_choice`]: null,
@@ -156,13 +208,11 @@ onValue(roomRef, async (snapshot) => {
       "player2_name"
     ).textContent = `Opponent: ${player2Name}`;
 
-    // Update choices and scores from the database
     playerChoice = data[`${playerId}_choice`] || null;
     opponentChoice = data[`${opponentId}_choice`] || null;
 
-    // Only reveal both choices if both players have made them
     if (playerChoice && opponentChoice && !isResultChecked) {
-      revealChoicesAndCheckResult(); // Check result only if not done
+      revealChoicesAndCheckResult();
     }
 
     playerScore = data[`${playerId}_score`] || 0;

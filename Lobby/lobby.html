@@ -5,10 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lobby</title>
     <link rel="stylesheet" href="lobby.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+      rel="stylesheet" />
     <script type="module" src="lobby.js" defer></script>
   </head>
   <body>
     <h2>Lobby</h2>
+
+    <!-- Player Profile Tab -->
+    <div id="player-profile">
+      <h3>Player Profile</h3>
+      <div><strong>Name:</strong> <span id="profile-username"></span></div>
+      <div>
+        <strong>Total Matches:</strong> <span id="total-matches"></span>
+      </div>
+      <div><strong>Total Wins:</strong> <span id="total-wins"></span></div>
+      <div><strong>Total Losses:</strong> <span id="total-losses"></span></div>
+      <div><strong>Win Ratio:</strong> <span id="win-ratio"></span></div>
+    </div>
+
     <div id="current-username"></div>
     <div>
       <h3>Online Players: <span id="online-count">0</span></h3>
@@ -20,5 +36,9 @@
     <div>
       <button id="exit-button">Exit</button>
     </div>
+    <button class="mute-button">
+      <i class="ri-volume-mute-fill" id="muteButton"></i>
+    </button>
+    <!-- <i class="ri-volume-up-fill"></i> -->
   </body>
 </html>

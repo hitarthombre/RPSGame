@@ -22,34 +22,42 @@ const sendPing = (userRef) => {
 
 const startPinging = (username) => {
   const dbRef = ref(db);
-  get(child(dbRef, `users/`)).then((snapshot) => {
-    const users = snapshot.val();
-    for (let key in users) {
-      if (users[key].username === username) {
-        userId = key;
-        break;
+  get(child(dbRef, `users/`))
+    .then((snapshot) => {
+      const users = snapshot.val();
+      for (let key in users) {
+        if (users[key].username === username) {
+          userId = key;
+          console.log(`User ID found: ${userId}`); // Log user ID
+          break;
+        }
       }
-    }
-    if (userId) {
-      const userRef = ref(db, `users/${userId}`);
-      // Mark user as online immediately
-      update(userRef, { online: true }).then(() => {
-        sendPing(userRef);
-        // Set up a ping mechanism that continuously updates `lastPing` field
-        pingInterval = setInterval(() => {
+      if (userId) {
+        const userRef = ref(db, `users/${userId}`);
+        update(userRef, { online: true }).then(() => {
           sendPing(userRef);
-        }, PING_INTERVAL);
-        // Handle disconnection (when the browser is closed)
-        onDisconnect(userRef).update({ online: false });
-      });
-    }
-  });
+          pingInterval = setInterval(() => {
+            sendPing(userRef);
+          }, PING_INTERVAL);
+          onDisconnect(userRef).update({ online: false });
+
+          // Load user stats after userId is assigned
+          loadUserStats();
+        });
+      } else {
+        console.error(`No user found with username: ${username}`);
+      }
+    })
+    .catch((error) => {
+      console.error("Error retrieving users:", error);
+    });
 };
 
 const monitorOnlineStatus = () => {
   const onlineList = document.getElementById("online-list");
   const onlineCount = document.getElementById("online-count");
   const usersRef = ref(db, "users/");
+
   onValue(usersRef, (snapshot) => {
     const users = snapshot.val();
     let onlineUsers = [];
@@ -60,7 +68,6 @@ const monitorOnlineStatus = () => {
         onlineUsers.push(user.username);
       }
     }
-    // Update the online players count and list
     onlineCount.textContent = onlineUsers.length;
     onlineList.innerHTML = onlineUsers
       .map((user) => `<div>${user}</div>`)
@@ -68,51 +75,86 @@ const monitorOnlineStatus = () => {
   });
 };
 
+// Function to start the game
 const startGame = (username) => {
   const userRef = ref(db, `users/${userId}`);
 
-  get(ref(db, "rooms/waiting")).then((snapshot) => {
-    if (snapshot.exists()) {
-      const waitingPlayerId = Object.keys(snapshot.val())[0];
-      const roomId = `room_${userId}_${waitingPlayerId}`;
+  get(ref(db, "rooms/waiting"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        // Found a waiting player, create a room and start game
+        const waitingPlayerId = Object.keys(snapshot.val())[0];
+        const roomId = `room_${userId}_${waitingPlayerId}`;
 
-      // Pair the players and create a room
-      update(ref(db, `rooms/${roomId}`), {
-        player1: userId,
-        player2: waitingPlayerId,
-        player1_choice: "",
-        player1_score: 0,
-        player2_choice: "",
-        player2_score: 0,
-        win: "",
-        status: "playing",
-      });
-      update(userRef, { status: "playing", roomId: roomId });
-      update(ref(db, `users/${waitingPlayerId}`), {
-        status: "playing",
-        roomId: roomId,
-      });
+        update(ref(db, `rooms/${roomId}`), {
+          player1: userId,
+          player2: waitingPlayerId,
+          player1_choice: "",
+          player1_score: 0,
+          player2_choice: "",
+          player2_score: 0,
+          win: "",
+          status: "playing",
+        });
 
-      // Remove from waiting list
-      remove(ref(db, `rooms/waiting/${waitingPlayerId}`));
+        // Update status of players
+        update(userRef, { status: "playing", roomId: roomId });
+        update(ref(db, `users/${waitingPlayerId}`), {
+          status: "playing",
+          roomId: roomId,
+        });
 
-      // Redirect to room page
-      window.location.href = `room.html?roomId=${roomId}&playerId=${userId}`;
-    } else {
-      // No waiting player, set current player to waiting
-      update(ref(db, `rooms/waiting/${userId}`), { username: username }).then(
-        () => {
-          update(userRef, { status: "waiting" });
-          // Redirect to waiting room page
-          window.location.href = `waiting.html?playerId=${userId}`;
-        }
-      );
-    }
-  });
+        // Remove waiting player from the waiting queue
+        remove(ref(db, `rooms/waiting/${waitingPlayerId}`));
+
+        // Redirect to the room page
+        window.location.href = `room.html?roomId=${roomId}&playerId=${userId}`;
+      } else {
+        // No waiting players, add current user to waiting list
+        update(ref(db, `rooms/waiting/${userId}`), { username: username }).then(
+          () => {
+            update(userRef, { status: "waiting" });
+            window.location.href = `waiting.html?playerId=${userId}`;
+          }
+        );
+      }
+    })
+    .catch((error) => {
+      console.error("Error starting the game:", error);
+    });
+};
+
+// Function to load and display user statistics
+const loadUserStats = async () => {
+  if (!userId) {
+    console.error("User ID is not assigned yet.");
+    return;
+  }
+
+  const userRef = ref(db, `users/${userId}`);
+  const snapshot = await get(userRef);
+  if (snapshot.exists()) {
+    const userStats = snapshot.val();
+    console.log("User Stats:", userStats); // Log user stats for debugging
+
+    const totalMatches = userStats.totalMatches || 0;
+    const totalWins = userStats.totalWins || 0;
+    const totalLosses = userStats.totalLosses || 0;
+    const winRatio =
+      totalMatches > 0 ? ((totalWins / totalMatches) * 100).toFixed(2) : 0;
+
+    document.getElementById("profile-username").textContent =
+      userStats.username || username;
+    document.getElementById("total-matches").textContent = totalMatches;
+    document.getElementById("total-wins").textContent = totalWins;
+    document.getElementById("total-losses").textContent = totalLosses;
+    document.getElementById("win-ratio").textContent = `${winRatio}%`;
+  } else {
+    console.error(`No data found for userId: ${userId}`);
+  }
 };
 
 document.getElementById("exit-button").addEventListener("click", () => {
-  console.log("Exit button clicked");
   update(ref(db, `users/${userId}`), { online: false });
 });
 
@@ -124,7 +166,6 @@ window.onload = () => {
     startPinging(username);
     monitorOnlineStatus();
 
-    // Attach event listener to start game button
     document.getElementById("start-button").addEventListener("click", () => {
       startGame(username);
     });
@@ -137,3 +178,60 @@ window.onload = () => {
 window.onbeforeunload = () => {
   clearInterval(pingInterval);
 };
+
+// Create a new Audio object and set the source
+const backgroundMusic = new Audio("/Assests/thunderstorm.mp3");
+backgroundMusic.loop = true; // Set the audio to loop
+
+// Play the audio when the page loads
+window.addEventListener("load", () => {
+  backgroundMusic.play();
+});
+
+// Get the mute button element
+const muteButton = document.getElementById("muteButton");
+
+// Toggle mute/unmute functionality
+muteButton.addEventListener("click", () => {
+  if (backgroundMusic.muted) {
+    backgroundMusic.muted = false;
+    // muteButton.textContent = "Mute"; // Update button text to "Mute"
+    muteButton.classList.remove("ri-volume-mute-fill");
+    muteButton.classList.add("ri-volume-up-fill"); // Update button icon to "Mute"
+  } else {
+    backgroundMusic.muted = true;
+    // muteButton.textContent = "Unmute"; // Update button text to "Unmute"
+    muteButton.classList.remove("ri-volume-up-fill");
+    muteButton.classList.add("ri-volume-mute-fill"); // Update button icon to "Unmute"
+  }
+});
+
+// Play the audio when the page loads, or fallback to user interaction
+const playMusic = () => {
+  backgroundMusic.play().catch((error) => {
+    console.warn("Autoplay blocked: Waiting for user interaction.");
+    document.body.addEventListener(
+      "click",
+      () => {
+        backgroundMusic.play().catch(() => {
+          console.error("Audio play failed even after user interaction.");
+        });
+      },
+      { once: true }
+    ); // Play after the first user interaction
+  });
+};
+
+// Start playing background music on window load
+window.addEventListener("load", playMusic);
+
+// Ensure the correct icon is displayed based on the muted state after page reload
+window.addEventListener("load", () => {
+  if (backgroundMusic.muted) {
+    muteButton.classList.remove("ri-volume-up-fill");
+    muteButton.classList.add("ri-volume-mute-fill");
+  } else {
+    muteButton.classList.remove("ri-volume-mute-fill");
+    muteButton.classList.add("ri-volume-up-fill");
+  }
+});
