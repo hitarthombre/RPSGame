@@ -41,3 +41,21 @@ Players can log in, join the game lobby, compete in real-time with others, and t
 | **Firebase DB**  | Real-time data and state sync |
 
 ---
+
+
+## 🧩 How It Works
+
+1. **Login/Signup**:
+   - Users create an account or log in with Firebase Auth.
+
+2. **Matchmaking**:
+   - Players are paired via the Realtime Database under a `rooms` node.
+
+3. **Gameplay**:
+   - Players select Rock, Paper, or Scissors.
+   - Results are synced in real-time and displayed to both users.
+
+4. **Stats Update**:
+   - Each game result updates win/loss stats in the user’s Firebase profile.
+
+---
